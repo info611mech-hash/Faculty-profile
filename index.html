@@ -1,39 +1,134 @@
-<input type="text" id="hrpn" placeholder="Enter HRPN">
-<button onclick="searchFaculty()">Search</button>
+<!DOCTYPE html>
+<html>
 
-<div id="result"></div>
+<head>
+
+<title>Faculty Profile Portal</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+}
+
+.container{
+background:white;
+padding:30px;
+margin:40px auto;
+width:600px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+input{
+padding:10px;
+width:250px;
+font-size:16px;
+}
+
+button{
+padding:10px 20px;
+font-size:16px;
+background:#007BFF;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0056b3;
+}
+
+.profile{
+margin-top:30px;
+text-align:left;
+}
+
+img{
+border-radius:8px;
+margin-top:10px;
+}
+
+</style>
 
 <script>
 
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSCv1H54WJPoysJZGfb1YmvPq1d5CuCKkFCTT3e_HYDEZ_gfWk68xHHEWZlLAJegOFvzh-aPL8KGHnX/pub?output=csv";
+/* PASSWORD PROTECTION */
 
-async function searchFaculty() {
+var password = prompt("Enter Faculty Access Password");
 
-let hrpn = document.getElementById("hrpn").value;
-
-let response = await fetch(sheetURL);
-let data = await response.text();
-
-let rows = data.split("\n");
-
-for(let i=1;i<rows.length;i++)
+if(password != "mech123")
 {
-let cols = rows[i].split(",");
+alert("Access Denied");
+window.location="https://google.com";
+}
 
-if(cols[0] == hrpn)
-{
-document.getElementById("result").innerHTML = `
+/* GOOGLE SHEET CSV LINK */
+
+const sheetURL="PASTE_YOUR_GOOGLE_SHEET_CSV_LINK_HERE";
+
+
+async function searchFaculty(){
+
+let hrpn=document.getElementById("hrpn").value;
+
+let response=await fetch(sheetURL);
+let data=await response.text();
+
+let rows=data.split("\n");
+
+let found=false;
+
+for(let i=1;i<rows.length;i++){
+
+let cols=rows[i].split(",");
+
+if(cols[0]==hrpn){
+
+found=true;
+
+document.getElementById("result").innerHTML=`
+
+<div class="profile">
+
 <h2>${cols[1]}</h2>
+
 <p><b>HRPN:</b> ${cols[0]}</p>
+
+<p><b>Date of Recruitment:</b> ${cols[2]}</p>
+
 <p><b>PAN:</b> ${cols[3]}</p>
-<p><b>DOB:</b> ${cols[4]}</p>
+
+<p><b>Date of Birth:</b> ${cols[4]}</p>
+
+<p><b>Address:</b> ${cols[5]}</p>
+
+<p><b>Joining Date:</b> ${cols[6]}</p>
+
+<p><b>Permanent Address:</b> ${cols[7]}</p>
+
+<p><b>EPIC:</b> ${cols[8]}</p>
+
+<p><b>Aadhar:</b> ${cols[9]}</p>
+
 <p><b>Basic Pay:</b> ${cols[10]}</p>
+
 <p><b>Pay Scale:</b> ${cols[11]}</p>
-<img src="${cols[13]}" width="120">
+
+<p><b>Gross Salary:</b> ${cols[12]}</p>
+
+<img src="${cols[13]}" width="140">
+
+</div>
+
 `;
-}
-}
 
 }
 
-</script>
+}
+
+if(found==false){
+document.ge
