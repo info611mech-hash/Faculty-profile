@@ -1,173 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Faculty Information Portal</title>
-
-<style>
-
-body{
-font-family: Times New Roman;
-background:#f2f2f2;
-text-align:center;
-padding:30px;
-}
-
-.container{
-width:650px;
-margin:auto;
-background:white;
-padding:20px;
-border-radius:8px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
-}
-
-input{
-padding:8px;
-width:200px;
-font-size:16px;
-}
-
-button{
-padding:8px 15px;
-font-size:16px;
-}
-
-.profile{
-text-align:left;
-margin-top:20px;
-}
-
-img{
-width:120px;
-border-radius:6px;
-margin-bottom:10px;
-}
-
-</style>
-
-<script>
-
-var password = prompt("Enter faculty access password:");
-
-if(password != "mechfaculty123")
-{
-alert("Access denied");
-window.location="https://sites.google.com/view/jnmgpmech/home?authuser=0";
-}
-
-</script>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<h2>Faculty Information Search</h2>
-
-<p>Enter HRPN Number</p>
-
-<input type="text" id="hrpn">
+<input type="text" id="hrpn" placeholder="Enter HRPN">
 <button onclick="searchFaculty()">Search</button>
 
-<div id="result" class="profile"></div>
-
-</div>
+<div id="result"></div>
 
 <script>
 
-var faculty = [
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSCv1H54WJPoysJZGfb1YmvPq1d5CuCKkFCTT3e_HYDEZ_gfWk68xHHEWZlLAJegOFvzh-aPL8KGHnX/pub?output=csv";
 
+async function searchFaculty() {
+
+let hrpn = document.getElementById("hrpn").value;
+
+let response = await fetch(sheetURL);
+let data = await response.text();
+
+let rows = data.split("\n");
+
+for(let i=1;i<rows.length;i++)
 {
-hrpn:"20042299",
-name:"Vimalkumar Dineshbhai Vaghela",
-recruitment:"29/10/2016",
-pan:"ALBPV5417E",
-dob:"14/04/1992",
-address:"Vrundavan Park 4, Lathi Road, Amreli - 365601",
-joinInstitute:"29/10/2016",
-permanent:"Block No. 31, Yamuna Maharani Society, Chuna Bhathhi Road, Keshod - 362220",
-epic:"AQJ1063551",
-aadhar:"469489246802",
-basicPay:"77500",
-payScale:"15600-39100 (6000 Grade) - Level 10",
-salary:"133250",
-photo:"https://drive.google.com/uc?export=view&id=1ixGvT85El_RKFvZPsXmSULrUDnCSWMCy"
-},
+let cols = rows[i].split(",");
 
+if(cols[0] == hrpn)
 {
-hrpn:"20042290",
-name:"Dhirenkumar Hareshbhai Joshi",
-recruitment:"28/10/2016",
-pan:"AWBPJ6554H",
-dob:"15/11/1985",
-address:"B/1, Raghuvanshi Society, Chittal Road, Amreli - 365601",
-joinInstitute:"28/10/2016",
-permanent:"B/1, Raghuvanshi Society, Chittal Road, Amreli - 365601",
-epic:"GFQ3155801",
-aadhar:"655265316875",
-basicPay:"73200",
-payScale:"15600-39100 (5400 Grade) - Level 9A",
-salary:"126112",
-photo:"https://drive.google.com/file/d/1ORoHSQzDWqVPFG5JLpfeJIdNrnbc2rku/view?usp=drive_link"
-},
-
-{
-hrpn:"20042298",
-name:"Vyas Chiragkumar Ravjibhai",
-recruitment:"29/10/2016",
-pan:"AQKPV9881E",
-dob:"01/08/1991",
-address:"Block No 13, Madhuvan Park Sheri No 2, Brahman Society, Amreli",
-joinInstitute:"29/10/2016",
-permanent:"At Nana Jadra, Taluka Mahuva, Dist Bhavnagar - 364290",
-epic:"UOE1415496",
-aadhar:"910814412705",
-basicPay:"77500",
-payScale:"15600-39100 (6000 Grade) - Level 10",
-salary:"133250",
-photo:"https://drive.google.com/uc?export=view&id=1T0lsM6eP_xdfLqwMnw7rDOhkr8cUFtBi"
+document.getElementById("result").innerHTML = `
+<h2>${cols[1]}</h2>
+<p><b>HRPN:</b> ${cols[0]}</p>
+<p><b>PAN:</b> ${cols[3]}</p>
+<p><b>DOB:</b> ${cols[4]}</p>
+<p><b>Basic Pay:</b> ${cols[10]}</p>
+<p><b>Pay Scale:</b> ${cols[11]}</p>
+<img src="${cols[13]}" width="120">
+`;
 }
-
-];
-
-function searchFaculty(){
-
-var hrpn=document.getElementById("hrpn").value;
-
-var output="Faculty not found";
-
-for(var i=0;i<faculty.length;i++){
-
-if(faculty[i].hrpn==hrpn){
-
-output=
-
-"<img src="+faculty[i].photo+"><br>"+
-
-"<b>Name:</b> "+faculty[i].name+"<br>"+
-"<b>HRPN:</b> "+faculty[i].hrpn+"<br>"+
-"<b>Date of Recruitment:</b> "+faculty[i].recruitment+"<br>"+
-"<b>PAN:</b> "+faculty[i].pan+"<br>"+
-"<b>Date of Birth:</b> "+faculty[i].dob+"<br>"+
-"<b>Current Address:</b> "+faculty[i].address+"<br>"+
-"<b>Joining Current Institute:</b> "+faculty[i].joinInstitute+"<br>"+
-"<b>Permanent Address:</b> "+faculty[i].permanent+"<br>"+
-"<b>EPIC:</b> "+faculty[i].epic+"<br>"+
-"<b>Aadhar:</b> "+faculty[i].aadhar+"<br>"+
-"<b>Basic Pay:</b> "+faculty[i].basicPay+"<br>"+
-"<b>Pay Scale:</b> "+faculty[i].payScale+"<br>"+
-"<b>Gross Salary:</b> "+faculty[i].salary;
-
 }
-
-}
-
-document.getElementById("result").innerHTML=output;
 
 }
 
 </script>
-
-</body>
-</html>
