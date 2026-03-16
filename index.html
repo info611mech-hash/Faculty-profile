@@ -131,4 +131,33 @@ document.getElementById("result").innerHTML=`
 }
 
 if(found==false){
-document.ge
+document.getElementById("result").innerHTML="<h3>No record found</h3>";
+}
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Faculty Profile Search</h1>
+
+<p>Enter HRPN Number</p>
+
+<input type="text" id="hrpn" placeholder="Enter HRPN">
+
+<br><br>
+
+<button onclick="searchFaculty()">Search</button>
+
+<div id="result"></div>
+
+</div>
+
+</body>
+
+</html>
